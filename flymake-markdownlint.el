@@ -10,8 +10,8 @@
 ;;; Commentary:
 
 ;; This package adds Markdown syntax checker using markdownlint-cli.
-;; Make sure 'markdownlint-cli' binary is on your path.
-;; Installation instructions https://github.com/DavidAnson/markdownlint
+;; Make sure 'markdownlint' executable is on your path.
+;; Installation instructions https://github.com/igorshubovych/markdownlint-cli
 
 ;; SPDX-License-Identifier: GPL-3.0-or-later
 
@@ -71,26 +71,27 @@
                     (with-current-buffer (process-buffer proc)
                       (goto-char (point-min))
                       (let ((diags)
-                            (map-vec (json-parse-buffer)))
-                        (if (not (vectorp map-vec))
-                            (error (format "json-parser-buffer returned unexpected type, %s" (type-of map-vec))))
-                        (let ((len (length map-vec))
-                              (i 0))
-                          (while (< i len)
-                            (let* ((map (aref map-vec i))
-                                   (lineNum (gethash "lineNumber" map))
-                                   (ruleNames (gethash "ruleNames" map))
-                                   (ruleDesc (gethash "ruleDescription" map))
-                                   (errRange (gethash "errorRange" map))
-                                   (error-type (if (eq errRange :null) :warning :error))
-                                   (region (flymake-diag-region source lineNum)))
-                              ;; expect `region' to only have 2 values (start . end)
-                              (push (flymake-make-diagnostic source
-                                                             (car region)
-                                                             (cdr region)
-                                                             error-type
-                                                             (format "%s: %s" (aref ruleNames 0) ruleDesc)) diags)
-                              (setq i (+ i 1)))))
+                            (map-vec (condition-case nil (json-parse-buffer) (error nil))))
+                        (when map-vec
+                          (if (not (vectorp map-vec))
+                              (error (format "json-parser-buffer returned unexpected type, %s" (type-of map-vec))))
+                          (let ((len (length map-vec))
+                                (i 0))
+                            (while (< i len)
+                              (let* ((map (aref map-vec i))
+                                     (lineNum (gethash "lineNumber" map))
+                                     (ruleNames (gethash "ruleNames" map))
+                                     (ruleDesc (gethash "ruleDescription" map))
+                                     (errRange (gethash "errorRange" map))
+                                     (error-type (if (eq errRange :null) :warning :error))
+                                     (region (flymake-diag-region source lineNum)))
+                                ;; expect `region' to only have 2 values (start . end)
+                                (push (flymake-make-diagnostic source
+                                                               (car region)
+                                                               (cdr region)
+                                                               error-type
+                                                               (format "%s: %s" (aref ruleNames 0) ruleDesc)) diags)
+                                (setq i (+ i 1))))))
                         (funcall report-fn (reverse diags))))
                   (flymake-log :warning "Canceling obsolete check %s"
                                proc))

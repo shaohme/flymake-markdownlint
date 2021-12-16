@@ -1,12 +1,15 @@
 # flymake-markdownlint
+
 A Flymake backend for validating Markdown files for Emacs (26+), using
 [markdownlint](https://github.com/DavidAnson/markdownlint)
 
 ## Installation
+
 `flymake-markdownlint` is not available on MELPA, so you have to add
 it using your `load-path` manually.
 
 ## Usage
+
 Add the following to your `.emacs` files for Emacs to load the backend
 when visiting a Markdown file
 
