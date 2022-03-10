@@ -1,7 +1,7 @@
 # flymake-markdownlint
 
-A Flymake backend for validating Markdown files for Emacs (26+), using
-[markdownlint](https://github.com/DavidAnson/markdownlint)
+A Flymake backend for validating Markdown files for Emacs (27+), using
+[markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
 
 ## Installation
 
