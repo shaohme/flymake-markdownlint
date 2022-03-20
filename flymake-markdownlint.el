@@ -4,7 +4,7 @@
 ;;
 ;; Author: Martin Kjær Jørgensen <mkj@gotu.dk>
 ;; Created: 15 December 2021
-;; Version: 0.1.2
+;; Version: 0.1.3
 ;; Package-Requires: ((emacs "27.1"))
 ;; URL: https://github.com/shaohme/flymake-markdownlint
 ;;; Commentary:
@@ -81,7 +81,7 @@
                               (map-vec (condition-case nil (json-parse-buffer) (error nil))))
                           (when map-vec
                             (if (not (vectorp map-vec))
-                                (error (format "json-parser-buffer returned unexpected type, %s" (type-of map-vec))))
+                                (error "JSON-parser-buffer returned unexpected type.  got %s" (type-of map-vec)))
                             (let ((len (length map-vec))
                                   (i 0))
                               (while (< i len)
