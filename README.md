@@ -1,5 +1,8 @@
 # flymake-markdownlint
 
+> [!IMPORTANT]
+> Project has moved to [Codeberg](https://codeberg.org/shaohme/flymake-markdownlint)
+
 A Flymake backend for validating Markdown files for Emacs (27+), using
 [markdownlint-cli](https://github.com/igorshubovych/markdownlint-cli)
 
